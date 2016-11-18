@@ -7,7 +7,7 @@ pygame.init()
 
 
 # Window
-WIDTH = 800
+WIDTH = 1000
 HEIGHT = 600
 SIZE = (WIDTH, HEIGHT)
 TITLE = "Maze"
