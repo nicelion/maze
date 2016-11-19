@@ -1,6 +1,7 @@
 # Imports
 import pygame
 import intersects
+import walls
 
 # Initialize game engine
 pygame.init()
@@ -24,21 +25,17 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)
-GREEN = (0, 255, 0)
+GREEN = (0, 48, 0)
 
 
 # Make a player
-player =  [200, 150, 25, 25]
+player =  [15, 0, 25, 25]
 player_vx = 0
 player_vy = 0
-player_speed = 5
+player_speed = 7
 
 # make walls
-wall1 =  [300, 275, 200, 25]
-wall2 =  [400, 450, 200, 25]
-wall3 =  [100, 100, 25, 200]
-
-walls = [wall1, wall2, wall3]
+walls = walls.walls  # gets walls from the walls file
 
 # Make coins
 coin1 = [300, 500, 25, 25]
@@ -47,10 +44,16 @@ coin3 = [150, 150, 25, 25]
 
 coins = [coin1, coin2, coin3]
 
+# def start_screen():
+#     font = pygame.font.Font(None, 150)
+#     text = font.render("MAZE", 1, WHITE)
+#     screen.blit(text, [370, 100])
+
 
 # Game loop
 win = False
 done = False
+is_game_playing = False
 
 while not done:
     # Event processing (React to key presses, mouse clicks, etc.)
@@ -58,6 +61,8 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+        if event.type == pygame.MOUSEBUTTONUP:
+            print(event.pos)
 
     pressed = pygame.key.get_pressed()
 
@@ -66,13 +71,14 @@ while not done:
     left = pressed[pygame.K_LEFT]
     right = pressed[pygame.K_RIGHT]
 
+
     if up:
         player_vy = -player_speed
     elif down:
         player_vy = player_speed
     else:
         player_vy = 0
-        
+
     if left:
         player_vx = -player_speed
     elif right:
@@ -80,14 +86,14 @@ while not done:
     else:
         player_vx = 0
 
-        
+
     # Game logic (Check for collisions, update points, etc.)
     ''' move the player in horizontal direction '''
     player[0] += player_vx
 
     ''' resolve collisions horizontally '''
     for w in walls:
-        if intersects.rect_rect(player, w):        
+        if intersects.rect_rect(player, w):
             if player_vx > 0:
                 player[0] = w[0] - player[2]
             elif player_vx < 0:
@@ -95,10 +101,10 @@ while not done:
 
     ''' move the player in vertical direction '''
     player[1] += player_vy
-    
+
     ''' resolve collisions vertically '''
     for w in walls:
-        if intersects.rect_rect(player, w):                    
+        if intersects.rect_rect(player, w):
             if player_vy > 0:
                 player[1] = w[1] - player[3]
             if player_vy < 0:
@@ -109,7 +115,21 @@ while not done:
 
 
 
+    top = player[1]
+    bottom = player[1] +player[3]
+    left = player[0]
+    right = player[0] + player[2]
 
+    ''' if the block is moved out of the window, nudge it back on. '''
+    if top < 0:
+        player[1] = 0
+    elif bottom > HEIGHT:
+        player[1] = HEIGHT - player[3]
+
+    if left < 0:
+        player[0] = 0
+    elif right > WIDTH:
+        player[0] = WIDTH - player[2]
 
     ''' get the coins '''
     coins = [c for c in coins if not intersects.rect_rect(player, c)]
@@ -117,18 +137,18 @@ while not done:
     if len(coins) == 0:
         win = True
 
-        
+
     # Drawing code (Describe the picture. It isn't actually drawn yet.)
     screen.fill(BLACK)
 
     pygame.draw.rect(screen, WHITE, player)
-    
+
     for w in walls:
         pygame.draw.rect(screen, RED, w)
 
     for c in coins:
         pygame.draw.rect(screen, YELLOW, c)
-        
+
     if win:
         font = pygame.font.Font(None, 48)
         text = font.render("You Win!", 1, GREEN)
