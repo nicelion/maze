@@ -18,7 +18,8 @@ wall8 = [195, 250, 100, 25]
 wall9 = [150, 320, 100, 25]
 wall10 = [295, 347, 25, HEIGHT - 390]
 wall11 = [204, 385, 100, 25]
-wall12 = [204, 385, 100, 25]
+wall12 = [143, 447, 100, 25]
+wall13 = [205, 505, 100, 25]
 
 
 
@@ -27,4 +28,5 @@ walls = [wall1, wall2,
          wall5, wall6,
          wall7, wall8,
          wall9, wall10,
-         wall11, wall12]
+         wall11, wall12,
+         wall13]

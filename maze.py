@@ -73,10 +73,10 @@ while not done:
 
     pressed = pygame.key.get_pressed()
 
-    up = pressed[pygame.K_UP]
-    down = pressed[pygame.K_DOWN]
-    left = pressed[pygame.K_LEFT]
-    right = pressed[pygame.K_RIGHT]
+    up = pressed[pygame.K_UP] or pressed[pygame.K_w]
+    down = pressed[pygame.K_DOWN] or pressed[pygame.K_s]
+    left = pressed[pygame.K_LEFT] or pressed[pygame.K_a]
+    right = pressed[pygame.K_RIGHT] or pressed[pygame.K_d]
 
     if not win:
         #seconds=(pygame.time.get_ticks()-start_ticks)/1000
@@ -173,10 +173,10 @@ while not done:
         screen.blit(text, [400, 200])
 
 
-    pygame.draw.rect(screen, WHITE, [830,0,WIDTH - 830, 100])
-    font = pygame.font.Font(None, 50)
-    text = font.render(str(seconds), 1, BLACK)
-    screen.blit(text, [910, 10])
+    # pygame.draw.rect(screen, WHITE, [830,0,WIDTH - 830, 100])
+    # font = pygame.font.Font(None, 50)
+    # text = font.render(str(seconds), 1, BLACK)
+    # screen.blit(text, [910, 10])
 
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
