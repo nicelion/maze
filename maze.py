@@ -33,7 +33,7 @@ GREEN = (0, 48, 0)
 player =  [15, 0, 25, 25]
 player_vx = 0
 player_vy = 0
-player_speed = 7
+player_speed = 6
 
 # make walls
 walls = walls.walls  # gets walls from the walls file
@@ -42,9 +42,14 @@ walls = walls.walls  # gets walls from the walls file
 coin1 = [300, 500, 25, 25]
 coin2 = [400, 200, 25, 25]
 coin3 = [150, 150, 25, 25]
+coin4 = [247, 530, 25, 25]
 
-coins = [coin1, coin2, coin3]
+coins = [coin1, coin2, coin3, coin4]
 
+# spawner
+top_spawner = [0, -5,50,10]
+
+spawners = [top_spawner]
 
 
 # def start_screen():
@@ -57,6 +62,7 @@ coins = [coin1, coin2, coin3]
 win = False
 done = False
 is_game_playing = False
+is_touching_spawner = False
 
 start_ticks=pygame.time.get_ticks() #starter tick
 
@@ -127,22 +133,26 @@ while not done:
                 player[1] = w[1] - player[3]
             if player_vy < 0:
                 player[1] = w[1] + w[3]
+    for s in spawners:
+        if intersects.rect_rect(player, s):
+            is_touching_spawner = True
 
 
     ''' here is where you should resolve player collisions with screen edges '''
-
-
-
     top = player[1]
-    bottom = player[1] +player[3]
+    bottom = player[1] + player[3]
     left = player[0]
     right = player[0] + player[2]
 
+
     ''' if the block is moved out of the window, nudge it back on. '''
-    if top < 0:
-        player[1] = 0
-    elif bottom > HEIGHT:
-        player[1] = HEIGHT - player[3]
+
+    if is_touching_spawner:
+        if top < 0:
+            player[1] = HEIGHT - 20
+            player[0] = 978
+        elif bottom > HEIGHT:
+            player[1] = HEIGHT - player[3]
 
     if left < 0:
         player[0] = 0
@@ -160,6 +170,9 @@ while not done:
     screen.fill(BLACK)
 
     pygame.draw.rect(screen, WHITE, player)
+
+    for s in spawners:
+        pygame.draw.rect(screen, WHITE, s)
 
     for w in walls:
         pygame.draw.rect(screen, RED, w)
