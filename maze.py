@@ -2,6 +2,7 @@
 import pygame
 import intersects
 import walls
+import sched, time
 
 # Initialize game engine
 pygame.init()
@@ -44,6 +45,8 @@ coin3 = [150, 150, 25, 25]
 
 coins = [coin1, coin2, coin3]
 
+
+
 # def start_screen():
 #     font = pygame.font.Font(None, 150)
 #     text = font.render("MAZE", 1, WHITE)
@@ -54,6 +57,10 @@ coins = [coin1, coin2, coin3]
 win = False
 done = False
 is_game_playing = False
+
+start_ticks=pygame.time.get_ticks() #starter tick
+
+ticks = 0
 
 while not done:
     # Event processing (React to key presses, mouse clicks, etc.)
@@ -71,7 +78,9 @@ while not done:
     left = pressed[pygame.K_LEFT]
     right = pressed[pygame.K_RIGHT]
 
-
+    if not win:
+        #seconds=(pygame.time.get_ticks()-start_ticks)/1000
+        seconds = 0
     if up:
         player_vy = -player_speed
     elif down:
@@ -86,6 +95,15 @@ while not done:
     else:
         player_vx = 0
 
+    # frame = ticks // 10
+    #
+    # ticks += 1
+    #
+    # if ticks >= 60:
+    #     ticks = 0
+    #
+    # if frame == 0:
+    #     time += 1
 
     # Game logic (Check for collisions, update points, etc.)
     ''' move the player in horizontal direction '''
@@ -151,10 +169,15 @@ while not done:
 
     if win:
         font = pygame.font.Font(None, 48)
-        text = font.render("You Win!", 1, GREEN)
+        text = font.render("You Win!", 1, YELLOW)
         screen.blit(text, [400, 200])
 
-    
+
+    pygame.draw.rect(screen, WHITE, [830,0,WIDTH - 830, 100])
+    font = pygame.font.Font(None, 50)
+    text = font.render(str(seconds), 1, BLACK)
+    screen.blit(text, [910, 10])
+
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
 
