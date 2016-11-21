@@ -52,11 +52,6 @@ top_spawner = [0, -5,50,10]
 spawners = [top_spawner]
 
 
-# def start_screen():
-#     font = pygame.font.Font(None, 150)
-#     text = font.render("MAZE", 1, WHITE)
-#     screen.blit(text, [370, 100])
-
 
 # Game loop
 win = False
@@ -147,12 +142,11 @@ while not done:
 
     ''' if the block is moved out of the window, nudge it back on. '''
 
-    if is_touching_spawner:
-        if top < 0:
-            player[1] = HEIGHT - 20
-            player[0] = 978
-        elif bottom > HEIGHT:
-            player[1] = HEIGHT - player[3]
+
+    if top < 0:
+        player[1] = 0
+    elif bottom > HEIGHT:
+        player[1] = HEIGHT - player[3]
 
     if left < 0:
         player[0] = 0
