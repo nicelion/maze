@@ -21,14 +21,17 @@ wall11 = [204, 385, 100, 25]
 wall12 = [143, 447, 100, 25]
 wall13 = [205, 505, 100, 25]
 wall14 = [205, 516, 25, 55]
-wall15 = [295,346,300,25]
+wall15 = [295, 346, 300, 25]
+wall16 = [570, 210, 25, 140]
+wall17 = [480, 208, 115, 25]
+wall18 = [313, 208, 115, 25]
 
-
-walls = [wall1, wall2,
-         wall3, wall4,
-         wall5, wall6,
-         wall7, wall8,
-         wall9, wall10,
+walls = [wall1,  wall2,
+         wall3,  wall4,
+         wall5,  wall6,
+         wall7,  wall8,
+         wall9,  wall10,
          wall11, wall12,
          wall13, wall14,
-         wall15]
+         wall15, wall16,
+         wall17, wall18]

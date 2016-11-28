@@ -43,8 +43,8 @@ coin1 = [300, 500, 25, 25]
 coin2 = [400, 200, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
-
-coins = [coin1, coin2, coin3, coin4]
+coin5 = [345, 246, 25, 25]
+coins = [coin1, coin2, coin3, coin4, coin5]
 
 # spawner
 top_spawner = [0, -5,50,10]
