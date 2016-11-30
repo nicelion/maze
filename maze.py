@@ -1,4 +1,4 @@
-# Imports
+  # Imports
 import pygame
 import intersects
 import walls
