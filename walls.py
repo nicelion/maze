@@ -36,6 +36,13 @@ wall26 = [500, 160, 100, 25]
 wall27 = [490, 400, 162, 25]
 wall28 = [488, 400, 25, 100]
 wall29 = [361, 475, 150, 25]
+wall30 = [418, 363, 25, 80]
+wall31 = [315, 418, 65, 25]
+wall32 = [361, 496, 25, 60]
+wall33 = [435, 540, 55, 25]
+wall34 = [488, 485, 25, 80]
+wall35 = [627, 399, 25, 150]
+wall36 = [555, 423, 25, 100]
 
 walls = [wall1,  wall2,
          wall3,  wall4,
@@ -51,4 +58,7 @@ walls = [wall1,  wall2,
          wall23, wall24,
          wall25, wall26,
          wall27, wall28,
-         wall29]
+         wall29, wall30,
+         wall31, wall32,
+         wall33, wall34,
+         wall35, wall36]
