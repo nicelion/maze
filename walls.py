@@ -48,6 +48,8 @@ wall38 = [815, 37, 200, 25]
 wall39 = [436, 635, 100, 25] 
 wall40 = [480, 597, 25, 100]
 wall41 = [363, 600, 25, 100]
+wall42 = [135, 618, 110, 25]
+wall43 = [240, 670, 25, HEIGHT - 670]
 
 walls = [wall1,  wall2,
          wall3,  wall4,
@@ -69,4 +71,5 @@ walls = [wall1,  wall2,
          wall35, wall36,
          wall37, wall38,
          wall39, wall40,
-         wall41]
+         wall41, wall42,
+         wall43]
