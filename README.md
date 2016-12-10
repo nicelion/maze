@@ -7,3 +7,6 @@ Use the arrow keys to control the player throughout the maze. Get to the end, be
 If time ends, you will lose.
 You have 25 seconds
 
+## To Do
+
+* Doors
