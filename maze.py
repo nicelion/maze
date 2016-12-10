@@ -57,6 +57,7 @@ spawners = [top_spawner]
 win = False
 done = False
 is_game_playing = False
+should_show_splash = True
 is_touching_spawner = False
 show_high_score_screen = False
 coins_collected = 0
@@ -83,6 +84,7 @@ def calculate_score(time, coins):
 
 ss_options = deque([1, 0, 0])
 def splash_screen():
+    screen.fill(BLACK)
 
     play_color = (255,255,255)
     high_color = (198, 198, 198)
@@ -128,7 +130,10 @@ def splash_screen():
     text_rect5 = text5.get_rect(center=(WIDTH/2, 550))
     screen.blit(text5, text_rect5)
 
+
 def high_score_screen():
+    screen.fill(BLACK)
+
     with open('high_scores.txt', 'r') as f:
         words = f.read().splitlines()
         first = words[0]
@@ -181,7 +186,6 @@ def win_screen(time, coins):
     screen.blit(text4, text_rect4)
 
 
-
 while not done:
     # Event processing (React to key presses, mouse clicks, etc.)
     ''' for now, we'll just check to see if the X is clicked '''
@@ -190,28 +194,34 @@ while not done:
             done = True
         if event.type == pygame.MOUSEBUTTONUP:
             print(event.pos)  # prints where mouse click event occured
+            print(should_show_splash)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if not is_game_playing and ss_options[0] == 1:  # enter is pressed and PLAY is the current selection
                     is_game_playing = True
-                if  not is_game_playing and ss_options[1] == 1:
+                if not is_game_playing and ss_options[1] == 1:
+                    should_show_splash = False
                     show_high_score_screen = True
             if not is_game_playing:
                 if event.key == pygame.K_UP:
                     ss_options.rotate(-1)  # shifts elements in list back one
                 if event.key == pygame.K_DOWN:
                     ss_options.rotate(1)  # shifts elements in list foward one
-
+            if event.key == pygame.K_ESCAPE:
+                if show_high_score_screen:
+                    show_high_score_screen = False
+                    should_show_splash = True
     pressed = pygame.key.get_pressed()
 
     up = pressed[pygame.K_UP] or pressed[pygame.K_w]
     down = pressed[pygame.K_DOWN] or pressed[pygame.K_s]
     left = pressed[pygame.K_LEFT] or pressed[pygame.K_a]
     right = pressed[pygame.K_RIGHT] or pressed[pygame.K_d]
+
     if win:
         win_screen(seconds, coins_collected)
-
-    elif is_game_playing and win is False:
+    elif is_game_playing:
+        should_show_splash = False
         seconds=(pygame.time.get_ticks()-start_ticks)/1000
             # seconds = 0
         if up:
@@ -319,10 +329,12 @@ while not done:
         # text = font.render(str(seconds), 1, BLACK)
         # screen.blit(text, [910, 10])
 
-    else:
+    elif should_show_splash:
         splash_screen()
-    if show_high_score_screen:
+    elif show_high_score_screen:
         high_score_screen()
+    else:
+        pass
 
         # if down:
         #     print('sdf')
