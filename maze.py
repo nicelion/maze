@@ -2,7 +2,7 @@
 import pygame
 import intersects
 import walls
-import sched, time
+from datetime import datetime, time
 from collections import deque
 
 # Initialize game engine
@@ -40,12 +40,12 @@ player_speed = 6
 walls = walls.walls  # gets walls from the walls file
 
 # Make coins
-coin1 = [300, 500, 25, 25]
+coin1 = [20, 150, 25, 25]
 coin2 = [400, 200, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
 coin5 = [345, 246, 25, 25]
-coins = [coin1, coin2, coin3, coin4, coin5]
+coins = [coin1, coin2, coin3]
 
 # spawner
 top_spawner = [0, -5,50,10]
@@ -58,10 +58,28 @@ win = False
 done = False
 is_game_playing = False
 is_touching_spawner = False
+show_high_score_screen = False
+coins_collected = 0
 
 start_ticks=pygame.time.get_ticks() #starter tick
 
 ticks = 0
+
+def calculate_score(time, coins):
+    global multiplier
+    multiplier = 1
+    if time >= 60:
+        multiplier = 1
+    if time <= 50 and time >= 40:
+        multiplier = 0.5
+    if time <= 49 and time >= 30:
+        multiplier = 2
+    if time <= 29 and time >= 15:
+        multiplier = 3
+    if time < 15:
+        multiplier = 5
+
+    return (coins_collected * multiplier) + 100
 
 ss_options = deque([1, 0, 0])
 def splash_screen():
@@ -69,15 +87,18 @@ def splash_screen():
     play_color = (255,255,255)
     high_color = (198, 198, 198)
     setting_color = (198, 198, 198)
-    if ss_options[0] == 1:
+
+    # The code below will check the status of the 'ss_options' list and set
+    # the font colors of each selection accordingly.
+    if ss_options[0] == 1:  # PLAY is the current selection
         play_color = (255,255,255)
         high_color = (198, 198, 198)
         setting_color = (198, 198, 198)
-    elif ss_options[1] == 1:
+    elif ss_options[1] == 1:  # HIGH SCORE is the current selection
         play_color = (198,198,198)
         high_color = (255, 255, 255)
         setting_color = (198, 198, 198)
-    elif ss_options[2] == 1:
+    elif ss_options[2] == 1:  # SETTINGS is the current selection
         play_color = (198,198,198)
         high_color = (198, 198, 198)
         setting_color = (255, 255, 255)
@@ -107,6 +128,60 @@ def splash_screen():
     text_rect5 = text5.get_rect(center=(WIDTH/2, 550))
     screen.blit(text5, text_rect5)
 
+def high_score_screen():
+    with open('high_scores.txt', 'r') as f:
+        words = f.read().splitlines()
+        first = words[0]
+        second = words[1]
+        third = words[2]
+
+    font = pygame.font.Font(None, 100)
+    text = font.render('High Scores', True, WHITE)
+    text_rect = text.get_rect(center=(WIDTH/2, 100))
+    screen.blit(text, text_rect)
+
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render(first, True, WHITE)
+    text_rect2 = text2.get_rect(center=(WIDTH/2, 250))
+    screen.blit(text2, text_rect2)
+
+    font3 = pygame.font.Font(None, 50)
+    text3 = font3.render(second, True, WHITE)
+    text_rect3 = text3.get_rect(center=(WIDTH/2, 350))
+    screen.blit(text3, text_rect3)
+
+    font4 = pygame.font.Font(None, 50)
+    text4 = font4.render(third, True, WHITE)
+    text_rect4 = text4.get_rect(center=(WIDTH/2, 450))
+    screen.blit(text4, text_rect4)
+
+def win_screen(time, coins):
+    screen.fill(BLACK)
+
+    score = calculate_score(time, coins)
+
+    font = pygame.font.Font(None, 100)
+    text = font.render('You Win!', True, WHITE)
+    text_rect = text.get_rect(center=(WIDTH/2, 100))
+    screen.blit(text, text_rect)
+
+    font2 = pygame.font.Font(None, 50)
+    text2 = font2.render('You finished in..... ' + str(time) + ' seconds', True, WHITE)
+    text_rect2 = text2.get_rect(center=(WIDTH/2, 200))
+    screen.blit(text2, text_rect2)
+
+    font3 = pygame.font.Font(None, 50)
+    text3 = font3.render('You collected...... ' + str(coins) + ' coins', True, WHITE)
+    text_rect3 = text3.get_rect(center=(WIDTH/2, 300))
+    screen.blit(text3, text_rect3)
+
+    font4 = pygame.font.Font(None, 85)
+    text4 = font4.render('Total: ' + str(score) + ' points', True, WHITE)
+    text_rect4 = text4.get_rect(center=(WIDTH/2, 450))
+    screen.blit(text4, text_rect4)
+
+
+
 while not done:
     # Event processing (React to key presses, mouse clicks, etc.)
     ''' for now, we'll just check to see if the X is clicked '''
@@ -114,17 +189,18 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
         if event.type == pygame.MOUSEBUTTONUP:
-            print(event.pos)
+            print(event.pos)  # prints where mouse click event occured
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                if not is_game_playing:
+                if not is_game_playing and ss_options[0] == 1:  # enter is pressed and PLAY is the current selection
                     is_game_playing = True
+                if  not is_game_playing and ss_options[1] == 1:
+                    show_high_score_screen = True
             if not is_game_playing:
                 if event.key == pygame.K_UP:
-                    ss_options.rotate(-1)
+                    ss_options.rotate(-1)  # shifts elements in list back one
                 if event.key == pygame.K_DOWN:
-                    ss_options.rotate(1)
-
+                    ss_options.rotate(1)  # shifts elements in list foward one
 
     pressed = pygame.key.get_pressed()
 
@@ -132,11 +208,11 @@ while not done:
     down = pressed[pygame.K_DOWN] or pressed[pygame.K_s]
     left = pressed[pygame.K_LEFT] or pressed[pygame.K_a]
     right = pressed[pygame.K_RIGHT] or pressed[pygame.K_d]
+    if win:
+        win_screen(seconds, coins_collected)
 
-    if is_game_playing:
-
-        if not win:
-            seconds=(pygame.time.get_ticks()-start_ticks)/1000
+    elif is_game_playing and win is False:
+        seconds=(pygame.time.get_ticks()-start_ticks)/1000
             # seconds = 0
         if up:
             player_vy = -player_speed
@@ -210,7 +286,12 @@ while not done:
             player[0] = WIDTH - player[2]
 
         ''' get the coins '''
-        coins = [c for c in coins if not intersects.rect_rect(player, c)]
+        hit_list = [c for c in coins if intersects.rect_rect(player, c)]
+
+        for hit in hit_list:
+            coins.remove(hit)
+            coins_collected += 1
+            print("sound!")
 
         if len(coins) == 0:
             win = True
@@ -230,19 +311,18 @@ while not done:
         for c in coins:
             pygame.draw.rect(screen, YELLOW, c)
 
-        if win:
-            font = pygame.font.Font(None, 48)
-            text = font.render("You Win!", 1, YELLOW)
-            screen.blit(text, [400, 200])
+
 
 
         # pygame.draw.rect(screen, WHITE, [830,0,WIDTH - 830, 100])
         # font = pygame.font.Font(None, 50)
         # text = font.render(str(seconds), 1, BLACK)
         # screen.blit(text, [910, 10])
-    else:
 
+    else:
         splash_screen()
+    if show_high_score_screen:
+        high_score_screen()
 
         # if down:
         #     print('sdf')
