@@ -1,9 +1,14 @@
+# maze.py
+#
+# By Ian Thompson
+# Computer Programming
+
 # Imports
 import pygame
 import intersects
 import walls
-from datetime import datetime, time
 from collections import deque
+import get_high_scores
 
 # Initialize game engine
 pygame.init()
@@ -45,7 +50,7 @@ coin2 = [400, 200, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
 coin5 = [345, 246, 25, 25]
-coins = [coin1, coin2, coin3]
+coins = [coin1, coin2, coin3, coin4, coin5]
 
 # spawner
 top_spawner = [0, -5,50,10]
@@ -53,7 +58,7 @@ top_spawner = [0, -5,50,10]
 spawners = [top_spawner]
 
 
-# Game loop
+# Game loop and Booleans
 win = False
 done = False
 is_game_playing = False
@@ -65,10 +70,15 @@ coins_collected = 0
 start_ticks=pygame.time.get_ticks() #starter tick
 
 ticks = 0
-
 def calculate_score(time, coins):
     global multiplier
     multiplier = 1
+
+    # The multiplier variable is set to one at default. The code below will calculate
+    # the correct score bassed on the time it took to complete the maze.
+    # After the multiplier value has been determined, the number of coins collected, times the multiplier,
+    # plus 100 is returned as the final score.
+
     if time >= 60:
         multiplier = 1
     if time <= 50 and time >= 40:
@@ -80,9 +90,11 @@ def calculate_score(time, coins):
     if time < 15:
         multiplier = 5
 
-    return (coins_collected * multiplier) + 100
+    return (coins_collected * multiplier) + 100  # Returns the calculated score
 
 ss_options = deque([1, 0, 0])
+# List which keeps track of which menu item is selected. If the value is one,
+# then that item is active. Each element corresponds with the position as seen on screen.
 def splash_screen():
     screen.fill(BLACK)
 
@@ -161,9 +173,13 @@ def high_score_screen():
     screen.blit(text4, text_rect4)
 
 def win_screen(time, coins):
+
+    high_scores = get_high_scores.scores
+    # print(high_scores)
     screen.fill(BLACK)
 
     score = calculate_score(time, coins)
+    # get_high_scores.current_score(score)
 
     font = pygame.font.Font(None, 100)
     text = font.render('You Win!', True, WHITE)
@@ -218,8 +234,8 @@ while not done:
     left = pressed[pygame.K_LEFT] or pressed[pygame.K_a]
     right = pressed[pygame.K_RIGHT] or pressed[pygame.K_d]
 
-    if win:
-        win_screen(seconds, coins_collected)
+    if win:  # the player has either completed the maze, and or collected all the coins.
+        win_screen(seconds, coins_collected)  # Displays the win screen containing releveant information
     elif is_game_playing:
         should_show_splash = False
         seconds=(pygame.time.get_ticks()-start_ticks)/1000
@@ -237,16 +253,6 @@ while not done:
             player_vx = player_speed
         else:
             player_vx = 0
-
-        # frame = ticks // 10
-        #
-        # ticks += 1
-        #
-        # if ticks >= 60:
-        #     ticks = 0
-        #
-        # if frame == 0:
-        #     time += 1
 
         # Game logic (Check for collisions, update points, etc.)
         ''' move the player in horizontal direction '''
@@ -322,13 +328,6 @@ while not done:
             pygame.draw.rect(screen, YELLOW, c)
 
 
-
-
-        # pygame.draw.rect(screen, WHITE, [830,0,WIDTH - 830, 100])
-        # font = pygame.font.Font(None, 50)
-        # text = font.render(str(seconds), 1, BLACK)
-        # screen.blit(text, [910, 10])
-
     elif should_show_splash:
         splash_screen()
     elif show_high_score_screen:
@@ -336,14 +335,12 @@ while not done:
     else:
         pass
 
-        # if down:
-        #     print('sdf')
 
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
 
 
-    # Limit refresh rate of game loop 
+    # Limit refresh rate of game loop
     clock.tick(refresh_rate)
 
 
