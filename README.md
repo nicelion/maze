@@ -3,9 +3,11 @@ Ian's maze.
 
 
 ## How to play
-Use the arrow keys to control the player throughout the maze. Get to the end, before time ends.
-If time ends, you will lose.
-You have 25 seconds
+Use the arrow keys to control the player throughout the maze.
+
+### Objective
+
+The objective of the game is to complete the maze in the quickest amount of time, while collecting as many coins as possible.
 
 ### High Scores
 
@@ -39,3 +41,6 @@ Then, the final score is calculated by the folloing equation:
 ## To Do
 
 * Doors
+* Saving functionality in the high score.
+* Second player
+* Making game 'endable' by completing the maze, not collecting all the coins.
