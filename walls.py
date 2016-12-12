@@ -53,6 +53,11 @@ wall43 = [240, 670, 25, HEIGHT - 670]
 wall44 = [564, 577, 25, HEIGHT - 564]
 wall45 = [644, 645, 70, 25]
 wall46 = [578, 454, 20, 25]
+wall47 = [718, 100, 100, 25]
+wall48 = [918, 58, 25, 70]
+wall49 = [867, 89, 25, 80]
+wall50 = [867, 167, WIDTH - 866, 25]
+wall51 = [920, 103, 50, 25]
 
 walls = [wall1,  wall2,
          wall3,  wall4,
@@ -76,4 +81,7 @@ walls = [wall1,  wall2,
          wall39, wall40,
          wall41, wall42,
          wall43, wall44,
-         wall45, wall46]
+         wall45, wall46,
+         wall47, wall48,
+         wall49, wall50,
+         wall51]
