@@ -50,8 +50,8 @@ coin2 = [400, 200, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
 coin5 = [345, 246, 25, 25]
-coins = [coin1, coin2, coin3, coin4, coin5]
-
+#coins = [coin1, coin2, coin3, coin4, coin5]
+coins = [coin1]
 # spawner
 top_spawner = [0, -5,50,10]
 
@@ -67,7 +67,7 @@ is_touching_spawner = False
 show_high_score_screen = False
 coins_collected = 0
 
-start_ticks=pygame.time.get_ticks() #starter tick
+start_ticks = 0 #starter tick
 
 ticks = 0
 def calculate_score(time, coins):
@@ -187,7 +187,7 @@ def win_screen(time, coins):
     screen.blit(text, text_rect)
 
     font2 = pygame.font.Font(None, 50)
-    text2 = font2.render('You finished in..... ' + str(time) + ' seconds', True, WHITE)
+    text2 = font2.render('You finished in..... ' + str(int(time)) + ' seconds', True, WHITE)
     text_rect2 = text2.get_rect(center=(WIDTH/2, 200))
     screen.blit(text2, text_rect2)
 
@@ -215,6 +215,8 @@ while not done:
             if event.key == pygame.K_RETURN:
                 if not is_game_playing and ss_options[0] == 1:  # enter is pressed and PLAY is the current selection
                     is_game_playing = True
+                    start_ticks=pygame.time.get_ticks()
+
                 if not is_game_playing and ss_options[1] == 1:
                     should_show_splash = False
                     show_high_score_screen = True
