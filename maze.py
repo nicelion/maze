@@ -175,11 +175,9 @@ def high_score_screen():
 def win_screen(time, coins):
 
     high_scores = get_high_scores.scores
-    # print(high_scores)
     screen.fill(BLACK)
 
     score = calculate_score(time, coins)
-    # get_high_scores.current_score(score)
 
     font = pygame.font.Font(None, 100)
     text = font.render('You Win!', True, WHITE)
