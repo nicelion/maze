@@ -9,6 +9,10 @@ Use the arrow keys to control the player throughout the maze.
 
 The objective of the game is to complete the maze in the quickest amount of time, while collecting as many coins as possible.
 
+## Switches
+
+Some coins may appear to be behind walls. To fix this, you first must find the switch, switch it, and then you can retrieve your coin.
+
 ### High Scores
 
 High scores can be found under the 'High Scores' section on the start screen.
@@ -40,7 +44,7 @@ Then, the final score is calculated by the folloing equation:
 
 ## To Do
 
-* Doors
+* ~~Doors~~ (Added 12/15/16)
 * Saving functionality in the high score.
 * Second player
 * Making game 'endable' by completing the maze, not collecting all the coins.
