@@ -23,6 +23,8 @@ screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption(TITLE)
 
 
+
+
 # Timer
 clock = pygame.time.Clock()
 refresh_rate = 60
@@ -32,7 +34,7 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)
-GREEN = (0, 48, 0)
+GREEN = (0, 255, 0)
 
 
 # Make a player
@@ -44,14 +46,22 @@ player_speed = 6
 # make walls
 walls = walls.walls  # gets walls from the walls file
 
+switch = [185, 670, 25, 25]
+door1 = [378, 418, 50, 25]
+
+
+doors = [door1]
+
+collidables = walls + doors
+
 # Make coins
 coin1 = [20, 150, 25, 25]
 coin2 = [400, 200, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
 coin5 = [345, 246, 25, 25]
-#coins = [coin1, coin2, coin3, coin4, coin5]
-coins = [coin1]
+coins = [coin1, coin2, coin3, coin4, coin5]
+
 # spawner
 top_spawner = [0, -5,50,10]
 
@@ -66,6 +76,8 @@ should_show_splash = True
 is_touching_spawner = False
 show_high_score_screen = False
 coins_collected = 0
+doors_open = False
+
 
 start_ticks = 0 #starter tick
 
@@ -259,26 +271,23 @@ while not done:
         player[0] += player_vx
 
         ''' resolve collisions horizontally '''
-        for w in walls:
-            if intersects.rect_rect(player, w):
+        for c in collidables:
+            if intersects.rect_rect(player, c):
                 if player_vx > 0:
-                    player[0] = w[0] - player[2]
+                    player[0] = c[0] - player[2]
                 elif player_vx < 0:
-                    player[0] = w[0] + w[2]
+                    player[0] = c[0] + c[2]
 
         ''' move the player in vertical direction '''
         player[1] += player_vy
 
         ''' resolve collisions vertically '''
-        for w in walls:
-            if intersects.rect_rect(player, w):
+        for c in collidables:
+            if intersects.rect_rect(player, c):
                 if player_vy > 0:
-                    player[1] = w[1] - player[3]
+                    player[1] = c[1] - player[3]
                 if player_vy < 0:
-                    player[1] = w[1] + w[3]
-        for s in spawners:
-            if intersects.rect_rect(player, s):
-                is_touching_spawner = True
+                    player[1] = c[1] + c[3]
 
 
         ''' here is where you should resolve player collisions with screen edges '''
@@ -327,6 +336,17 @@ while not done:
         for c in coins:
             pygame.draw.rect(screen, YELLOW, c)
 
+        if not doors_open:
+            for d in doors:
+                pygame.draw.rect(screen, WHITE, d)
+
+        if intersects.rect_rect(player, switch):
+            doors_open = True
+
+            collidables = [c for c in collidables if c not in doors]
+
+        # Draw Switches
+        pygame.draw.rect(screen, GREEN, [185, 670, 25, 25])
 
     elif should_show_splash:
         splash_screen()
