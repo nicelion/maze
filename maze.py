@@ -293,7 +293,7 @@ while not done:
 
         if top < 0:
             player[1] = 0
-        elif bottom > HEIGHT:
+        elif bottom > HEIGHT: 
             player[1] = HEIGHT - player[3]
 
         if left < 0:
