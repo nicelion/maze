@@ -60,6 +60,7 @@ coin2 = [400, 180, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
 coin5 = [345, 246, 25, 25]
+<<<<<<< Updated upstream
 coin6 = [350, 387, 25, 25]
 coin7 = [172, 395, 25, 25]
 coin8 = [164, 524, 25, 25]
@@ -67,9 +68,13 @@ coin9 = [164, 524, 25, 25]
 coin10 = [447, 513, 25, 25]
 coins = [coin1, coin2, coin3, coin4, coin5, coin6,
          coin7, coin8, coin9, coin10]
+=======
+coin6 = [360, 386, 25, 25]
+coins = [coin1, coin2, coin3, coin4, coin5, coin6]
+>>>>>>> Stashed changes
 
 # spawner
-top_spawner = [0, -5,50,10]
+top_spawner = [0, -5, 50, 10]
 
 spawners = [top_spawner]
 
