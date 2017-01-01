@@ -61,6 +61,11 @@ wall51 = [920, 103, 50, 25]
 wall52 = [789, 167, 80, 25]
 wall53 = [788, 167, 25, 90]
 wall54 = [788, 235, 50, 25]
+wall55 = [922, 187, 25, 110]
+wall56 = [715, 298, 177, 25]
+wall57 = [867, 220, 25, 80]
+wall58 = [841, 360, 25, 60]
+wall59 = [721, 400, 120, 25]
 
 walls = [wall1,  wall2,
          wall3,  wall4,
@@ -88,4 +93,7 @@ walls = [wall1,  wall2,
          wall47, wall48,
          wall49, wall50,
          wall51, wall52,
-         wall53, wall54]
+         wall53, wall54,
+         wall55, wall56,
+         wall57, wall58,
+         wall59]

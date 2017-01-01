@@ -60,7 +60,6 @@ coin2 = [400, 180, 25, 25]
 coin3 = [150, 150, 25, 25]
 coin4 = [247, 530, 25, 25]
 coin5 = [345, 246, 25, 25]
-<<<<<<< Updated upstream
 coin6 = [350, 387, 25, 25]
 coin7 = [172, 395, 25, 25]
 coin8 = [164, 524, 25, 25]
@@ -68,10 +67,7 @@ coin9 = [164, 524, 25, 25]
 coin10 = [447, 513, 25, 25]
 coins = [coin1, coin2, coin3, coin4, coin5, coin6,
          coin7, coin8, coin9, coin10]
-=======
-coin6 = [360, 386, 25, 25]
-coins = [coin1, coin2, coin3, coin4, coin5, coin6]
->>>>>>> Stashed changes
+
 
 # spawner
 top_spawner = [0, -5, 50, 10]
@@ -222,6 +218,16 @@ def win_screen(time, coins):
     text_rect4 = text4.get_rect(center=(WIDTH/2, 450))
     screen.blit(text4, text_rect4)
 
+def restart():
+    global win, done, is_game_playing,should_show_splash, is_touching_spawner, show_high_score_screen, coins_collected, doors_open
+    win = False
+    done = False
+    is_game_playing = False
+    should_show_splash = True
+    is_touching_spawner = False
+    show_high_score_screen = False
+    coins_collected = 0
+    doors_open = False
 
 while not done:
     # Event processing (React to key presses, mouse clicks, etc.)
@@ -250,6 +256,10 @@ while not done:
                 if show_high_score_screen:
                     show_high_score_screen = False
                     should_show_splash = True
+            if event.key == pygame.K_SPACE:
+                if win:
+                    # restart()
+                    pass
     pressed = pygame.key.get_pressed()
 
     up = pressed[pygame.K_UP] or pressed[pygame.K_w]
