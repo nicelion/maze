@@ -65,9 +65,10 @@ coin7 = [172, 395, 25, 25]
 coin8 = [164, 524, 25, 25]
 coin9 = [164, 524, 25, 25]
 coin10 = [447, 513, 25, 25]
-coins = [coin1, coin2, coin3, coin4, coin5, coin6,
-         coin7, coin8, coin9, coin10]
+#coins = [coin1, coin2, coin3, coin4, coin5, coin6,
+ #        coin7, coin8, coin9, coin10]
 
+coins = [coin1, coin2]
 
 # spawner
 top_spawner = [0, -5, 50, 10]
@@ -229,7 +230,12 @@ def restart():
     coins_collected = 0
     doors_open = False
 
+
+
+    # 
+
 while not done:
+
     # Event processing (React to key presses, mouse clicks, etc.)
     ''' for now, we'll just check to see if the X is clicked '''
     for event in pygame.event.get():
@@ -258,8 +264,8 @@ while not done:
                     should_show_splash = True
             if event.key == pygame.K_SPACE:
                 if win:
-                    # restart()
-                    pass
+                    restart()
+                    
     pressed = pygame.key.get_pressed()
 
     up = pressed[pygame.K_UP] or pressed[pygame.K_w]
