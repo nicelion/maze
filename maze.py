@@ -37,58 +37,71 @@ BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)
 GREEN = (0, 255, 0)
 
-
-# Make a player
-player =  [8, 8, 25, 25]
 player_vx = 0
 player_vy = 0
-player_speed = 5
+player_speed = 10
 
-# make walls
-wall1 =  [300, 275, 200, 25]
-wall2 =  [400, 450, 200, 25]
-wall3 =  [100, 100, 25, 200]
-
-walls = walls.walls
-
-# Make coins
-coin1 = [20, 150, 25, 25]
-coin2 = [400, 180, 25, 25]
-coin3 = [150, 150, 25, 25]
-coin4 = [247, 530, 25, 25]
-coin5 = [345, 246, 25, 25]
-coin6 = [350, 387, 25, 25]
-coin7 = [172, 395, 25, 25]
-coin8 = [164, 524, 25, 25]
-coin9 = [164, 524, 25, 25]
-coin10 = [447, 513, 25, 25]
-#coins = [coin1, coin2, coin3, coin4, coin5, coin6,
- #        coin7, coin8, coin9, coin10]
-
-coins = [coin1, coin2]
-
-switch = [185, 670, 25, 25]
-door1 = [378, 418, 50, 25]
+def setup():
+    global player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
+    # Make a player
+    player =  [8, 8, 25, 25]
 
 
-doors = [door1]
+    # make walls
+    # walls = walls.walls
 
-collidables = walls + doors
+    wall = walls.walls
 
-# Game loop and Booleans
-win = False
-done = False
-is_game_playing = False
-should_show_splash = True
-is_touching_spawner = False
-show_high_score_screen = False
-coins_collected = 0
-doors_open = False
+    for w in wall:
+        walls = wall
+
+    # Make coins
+    coin1 = [20, 150, 25, 25]
+    coin2 = [400, 180, 25, 25]
+    coin3 = [150, 150, 25, 25]
+    coin4 = [247, 530, 25, 25]
+    coin5 = [345, 246, 25, 25]
+    coin6 = [350, 387, 25, 25]
+    coin7 = [172, 395, 25, 25]
+    coin8 = [164, 524, 25, 25]
+    coin9 = [164, 524, 25, 25]
+    coin10 = [447, 513, 25, 25]
+    #coins = [coin1, coin2, coin3, coin4, coin5, coin6,
+     #        coin7, coin8, coin9, coin10]
+
+    coins = [coin1, coin2]
+
+    switch = [185, 670, 25, 25]
+    door1 = [378, 418, 50, 25]
 
 
-start_ticks = 0 #starter tick
+    doors = [door1]
 
-ticks = 0
+    collidables = walls + doors
+
+    # Game loop and Booleans
+    win = False
+    done = False
+    is_game_playing = False
+    should_show_splash = True
+    is_touching_spawner = False
+    show_high_score_screen = False
+    coins_collected = 0
+    doors_open = False
+
+
+    start_ticks = 0 #starter tick
+
+    ticks = 0
+
+setup()
+
+def end_screen():
+    screen.fill(BLACK)
+    font = pygame.font.Font(None, 100)
+    text = font.render('You Win!', True, WHITE)
+    text_rect = text.get_rect(center=(WIDTH/2, 100))
+    screen.blit(text, text_rect)
 
 
 while not done:
@@ -99,6 +112,10 @@ while not done:
             done = True
         if event.type == pygame.MOUSEBUTTONUP:
             print(event.pos)  # prints where mouse click event occured
+        if event.type == pygame.KEYDOWN:
+            if win:
+                if event.key == pygame.K_SPACE:
+                    setup()
 
     pressed = pygame.key.get_pressed()
 
@@ -203,9 +220,7 @@ while not done:
     pygame.draw.rect(screen, GREEN, [185, 670, 25, 25])
 
     if win:
-        font = pygame.font.Font(None, 48)
-        text = font.render("You Win!", 1, GREEN)
-        screen.blit(text, [400, 200])
+        end_screen()
 
 
     # Update screen (Actually draw the picture in the window.)
