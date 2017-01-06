@@ -45,7 +45,7 @@ wall = walls.walls
 
 
 def setup():
-    global player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
+    global time_remaining, player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
     # Make a player
     player =  [8, 8, 25, 25]
 
@@ -90,7 +90,9 @@ def setup():
     show_high_score_screen = False
     coins_collected = 0
     doors_open = False
-
+    
+    time_remaining = 3
+    
 
     start_ticks = 0 #starter tick
 
@@ -104,6 +106,12 @@ def end_screen():
     text = font.render('You Win!', True, WHITE)
     text_rect = text.get_rect(center=(WIDTH/2, 100))
     screen.blit(text, text_rect)
+
+    font2 = pygame.font.Font(None, 100)
+    text2 = font2.render('You   ' + str(coins_collected) + ' coins', True, WHITE)
+    text_rect2 = text2.get_rect(center=(WIDTH/2, 200))
+    screen.blit(text2, text_rect2)
+    
 
 
 while not done:
@@ -224,6 +232,13 @@ while not done:
     if win:
         end_screen()
 
+    if not win:
+        ticks += 1
+
+        if ticks % 60 == 0:
+            time_remaining -= 1
+        if time_remaining == 0:
+            end_screen()
 
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
