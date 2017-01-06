@@ -41,6 +41,9 @@ player_vx = 0
 player_vy = 0
 player_speed = 10
 
+wall = walls.walls
+
+
 def setup():
     global player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
     # Make a player
@@ -50,7 +53,6 @@ def setup():
     # make walls
     # walls = walls.walls
 
-    wall = walls.walls
 
     for w in wall:
         walls = wall
