@@ -39,15 +39,20 @@ GREEN = (0, 255, 0)
 
 player_vx = 0
 player_vy = 0
-player_speed = 10
+player_speed = 20
+
+player2_vx = 0
+player2_vy = 0
+player2_speed = 20
 
 wall = walls.walls
 
 
 def setup():
-    global time_remaining, player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
+    global player2, coins_collected2, time_remaining, player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
     # Make a player
     player =  [8, 8, 25, 25]
+    player2 =  [975, 674, 25, 25]
 
 
     # make walls
@@ -89,9 +94,10 @@ def setup():
     is_touching_spawner = False
     show_high_score_screen = False
     coins_collected = 0
+    coins_collected2 = 0
     doors_open = False
     
-    time_remaining = 3
+    time_remaining = -1
     
 
     start_ticks = 0 #starter tick
@@ -101,14 +107,20 @@ def setup():
 setup()
 
 def end_screen():
+
+    if coins_collected > coins_collected2:
+        win =  "Player 1 Wins!"
+    else:
+        win = "Player 2 Wins!"
+
     screen.fill(BLACK)
     font = pygame.font.Font(None, 100)
-    text = font.render('You Win!', True, WHITE)
+    text = font.render(win, True, WHITE)
     text_rect = text.get_rect(center=(WIDTH/2, 100))
     screen.blit(text, text_rect)
 
     font2 = pygame.font.Font(None, 100)
-    text2 = font2.render('You   ' + str(coins_collected) + ' coins', True, WHITE)
+    text2 = font2.render('You collected ' + str(coins_collected) + ' coins', True, WHITE)
     text_rect2 = text2.get_rect(center=(WIDTH/2, 200))
     screen.blit(text2, text_rect2)
     
@@ -134,6 +146,11 @@ while not done:
     left = pressed[pygame.K_LEFT]
     right = pressed[pygame.K_RIGHT]
 
+    w_up = pressed[pygame.K_w]
+    a_down = pressed[pygame.K_s]
+    s_left = pressed[pygame.K_a]
+    d_right = pressed[pygame.K_d]
+
 
     if up:
         player_vy = -player_speed
@@ -150,9 +167,26 @@ while not done:
         player_vx = 0
 
 
+    if w_up:
+        player2_vy = -player2_speed
+    elif a_down:
+        player2_vy = player2_speed
+    else:
+        player2_vy = 0
+
+    if s_left:
+        player2_vx = -player2_speed
+    elif d_right:
+        player2_vx = player2_speed
+    else:
+        player2_vx = 0
+
+
     # Game logic (Check for collisions, update points, etc.)
     ''' move the player in horizontal direction '''
     player[0] += player_vx
+    player2[0] += player2_vx
+
 
     ''' resolve collisions horizontally '''
     for c in collidables:
@@ -161,9 +195,15 @@ while not done:
                 player[0] = c[0] - player[2]
             elif player_vx < 0:
                 player[0] = c[0] + c[2]
+        if intersects.rect_rect(player2, c):
+            if player2_vx > 0:
+                player2[0] = c[0] - player2[2]
+            elif player2_vx < 0:
+                player2[0] = c[0] + c[2]
 
     ''' move the player in vertical direction '''
     player[1] += player_vy
+    player2[1] += player2_vy
 
     ''' resolve collisions vertically '''
     for c in collidables:
@@ -172,7 +212,11 @@ while not done:
                 player[1] = c[1] - player[3]
             if player_vy < 0:
                 player[1] = c[1] + c[3]
-
+        if intersects.rect_rect(player2, c):
+            if player2_vy > 0:
+                player2[1] = c[1] - player2[3]
+            if player2_vy < 0:
+                player2[1] = c[1] + c[3]
 
     ''' here is where you should resolve player collisions with screen edges '''
     top = player[1]
@@ -180,6 +224,10 @@ while not done:
     left = player[0]
     right = player[0] + player[2]
 
+    top2 = player2[1]
+    bottom2 = player2[1] + player2[3]
+    left2 = player2[0]
+    right2 = player2[0] + player2[2]
 
     ''' if the block is moved out of the window, nudge it back on. '''
 
@@ -194,13 +242,28 @@ while not done:
     elif right > WIDTH:
         player[0] = WIDTH - player[2]
 
+    if top2 < 0:
+        player2[1] = 0
+    elif bottom2 > HEIGHT:
+        player2[1] = HEIGHT - player2[3]
+
+    if left2 < 0:
+        player2[0] = 0
+    elif right2 > WIDTH:
+        player2[0] = WIDTH - player2[2]
 
     ''' get the coins '''
     hit_list = [c for c in coins if intersects.rect_rect(player, c)]
+    hit_list2 = [c for c in coins if intersects.rect_rect(player2, c)]
 
     for hit in hit_list:
         coins.remove(hit)
         coins_collected += 1
+        print("sound!")
+
+    for hit in hit_list2:
+        coins.remove(hit)
+        coins_collected2 += 1
         print("sound!")
 
     if len(coins) == 0:
@@ -210,6 +273,8 @@ while not done:
     screen.fill(BLACK)
 
     pygame.draw.rect(screen, WHITE, player)
+    pygame.draw.rect(screen, WHITE, player2)
+
 
     for w in walls:
         pygame.draw.rect(screen, RED, w)
@@ -226,6 +291,11 @@ while not done:
 
         collidables = [c for c in collidables if c not in doors]
 
+    if intersects.rect_rect(player2, switch):
+        doors_open = True
+
+        collidables = [c for c in collidables if c not in doors]
+
     # Draw Switches
     pygame.draw.rect(screen, GREEN, [185, 670, 25, 25])
 
@@ -238,7 +308,7 @@ while not done:
         if ticks % 60 == 0:
             time_remaining -= 1
         if time_remaining == 0:
-            end_screen()
+            win = True
 
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
