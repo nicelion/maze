@@ -49,7 +49,7 @@ wall = walls.walls
 
 
 def setup():
-    global player2, coins_collected2, time_remaining, player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
+    global player2, switch2, door2_open, door_2, coins_collected2, time_remaining, player, coins, switch, doors, win, collidables, done, is_game_playing, should_show_splash, is_touching_spawner,show_high_score_screen, coins_collected, ticks, start_ticks, doors_open, walls
     # Make a player
     player =  [8, 8, 25, 25]
     player2 =  [975, 674, 25, 25]
@@ -95,18 +95,21 @@ def setup():
     coin28 = [969, 236, wh, wh]
 
 
-    # coins = [coin1, coin2, coin3, coin4, coin5, coin6,
-    #         coin7, coin8, coin9, coin10, coin11, coin12,
-    #          coin13, coin14, coin15, coin16, coin17, coin18,
-    #          coin19, coin20, coin21, coin22, coin23, coin24, coin25, coin26, coin27, coin28]
+    coins = [coin1, coin2, coin3, coin4, coin5, coin6,
+            coin7, coin8, coin9, coin10, coin11, coin12,
+             coin13, coin14, coin15, coin16, coin17, coin18,
+             coin19, coin20, coin21, coin22, coin23, coin24, coin25, coin26, coin27, coin28]
 
-    coins = [coin1]
+    # coins = [coin1]
 
     switch = [185, 670, 25, 25]
+    switch2 = [962, 547, 25, 25]
     door1 = [378, 418, 50, 25]
 
+    door2 = [912, 360, WIDTH - 912, 25]
 
     doors = [door1]
+    door_2 = [door2]
 
     collidables = walls + doors
 
@@ -120,8 +123,9 @@ def setup():
     coins_collected = 0
     coins_collected2 = 0
     doors_open = False
+    door2_open = False
     
-    time_remaining = -1
+    time_remaining = 25
     
 
     start_ticks = 0 #starter tick
@@ -134,8 +138,10 @@ def end_screen():
 
     if coins_collected > coins_collected2:
         win =  "Player 1 Wins!"
-    else:
+    elif coins_collected < coins_collected2:
         win = "Player 2 Wins!"
+    elif coins_collected == coins_collected2:
+        win = "It's a Tie!"
 
     if coins_collected > 1 or coins_collected == 0:
         p1_plural = "s"
@@ -185,6 +191,8 @@ while not done:
             if win:
                 if event.key == pygame.K_SPACE:
                     setup()
+                if event.key == pygame.K_q:
+                    done = True
 
             if not is_game_playing:
                 is_game_playing = True
@@ -363,6 +371,23 @@ while not done:
                 time_remaining -= 1
             if time_remaining == 0:
                 win = True
+
+    if not is_game_playing and not win:
+        font = pygame.font.Font(None, 100)
+        text = font.render("Ian's MAZE", True, WHITE)
+        text_rect = text.get_rect(center=(WIDTH/2, 100))
+        screen.blit(text, text_rect)
+
+        font2 = pygame.font.Font(None, 30)
+        text2 = font2.render("by Ian Thompson", True, WHITE)
+        text_rect2 = text2.get_rect(center=(WIDTH/2, 150))
+        screen.blit(text2, text_rect2)
+
+        font3 = pygame.font.Font(None, 50)
+        text3 = font3.render("Press Enter to Play!", True, WHITE)
+        text_rect3 = text3.get_rect(center=(WIDTH/2, HEIGHT/2))
+        screen.blit(text3, text_rect3)
+
 
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
